@@ -6,17 +6,6 @@
   <title>ASI Boot Inc. - Torward the inevitable</title>
 
   <style>
-
-    html, body {
-    /* 核心属性：禁止用户选择文本 */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE10+/Edge */
-    user-select: none;         /* Standard */
-    
-    /* 额外保险：禁止图片被拖拽（防止用户通过拖拽图片暴露内容） */
-    -webkit-user-drag: none;
-    }
     :root {
       --bg: #ffffff;
       --ink: #000000;
@@ -24,254 +13,156 @@
       --blue: #9fb9dc;     
       --muted: #86868b; 
       --line: #f5f5f7;
-      --page-margin: 22vw; 
+      --page-margin: 18vw; 
     }
 
     * { box-sizing: border-box; }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "SF Pro Display", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0; padding: 0;
+      background: var(--bg); color: var(--ink);
+      font-family: "SF Pro Display", "Inter", sans-serif;
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
+      -webkit-user-select: none; user-select: none;
+      overflow-x: hidden;
     }
 
-    /* ================= 背景细线设计 ================= */
-    .bg-lines {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-    .vertical-line {
-      position: absolute;
-      left: var(--page-margin);
-      top: 0;
-      width: 1px;
-      height: 100%;
-      background: var(--line);
-    }
+    /* ================= 辅助布局 ================= */
+    .bg-lines { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    .vertical-line { position: absolute; left: var(--page-margin); top: 0; width: 1px; height: 100%; background: var(--line); }
 
-    /* ================= 通用动效 ================= */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 1.8s cubic-bezier(0.15, 1, 0.3, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1.8s cubic-bezier(0.15, 1, 0.3, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ================= Hero Section ================= */
-    .hero {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 var(--page-margin);
+    /* ================= Hero & Manifesto ================= */
+    .hero { 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      padding: 80px var(--page-margin); 
     }
+    .logo-img { margin-bottom: 40px; object-fit: contain; width: auto; height: 80px; }
+    .hero-mission { font-size: 24px; font-weight: 400; line-height: 1.4; max-width: 500px; }
+    .hero-sub { margin-top: 30px; font-size: 14px; color: var(--muted); letter-spacing: 0.05em; max-width: 400px; line-height: 1.6; }
 
-    .logo-img {
-      margin-bottom: 40px;
-      object-fit: contain;
-      /*filter: grayscale(1); /* 保持高冷色彩 */
-    }
+    .manifesto { padding: 180px var(--page-margin); border-top: 1px solid var(--line); }
+    .manifesto h2 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5em; color: var(--purple); margin-bottom: 40px; font-weight: 500; }
+    .manifesto p { font-size: 16px; font-weight: 300; line-height: 2; color: var(--ink); max-width: 650px; }
 
-    .hero-mission {
-      font-size: 24px;
-      font-weight: 400;
-      line-height: 1.4;
-      max-width: 500px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero-sub {
-      margin-top: 30px;
-      font-size: 14px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-      max-width: 400px;
-    }
-
-    /* ================= Mission Section ================= */
-    .manifesto {
-      padding: 180px var(--page-margin);
-      border-top: 1px solid var(--line);
-    }
-    .manifesto h2 {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5em;
-      color: var(--purple);
-      margin-bottom: 60px;
-      font-weight: 500;
-    }
-    .manifesto p {
-      font-size: 16px;
-      font-weight: 200;
-      line-height: 1.8;
-      color: var(--ink);
-      max-width: 700px;
-      letter-spacing: 0.02em;
-    }
-
-    /* ================= Stage Items ================= */
+    /* ================= Stage Items (核心布局切换) ================= */
     .stage-item {
-      display: grid;
-      grid-template-columns: 1fr 180px;
-      gap: 100px;
-      padding: 240px var(--page-margin);
-      border-top: 1px solid var(--line);
-      align-items: center;
-    }
-
-    .stage-content .num {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 20px;
-      display: block;
-      letter-spacing: 0.2em;
-    }
-    .stage-content h3 {
-      font-size: 32px;
-      font-weight: 300;
-      margin: 0 0 30px 0;
-      letter-spacing: 0.02em;
-    }
-    .stage-content p {
-      font-size: 16px;
-      color: var(--muted);
-      line-height: 1.9;
-      max-width: 520px;
-      font-weight: 300;
-    }
-
-    /* ================= CSS 几何体 + 动画 ================= */
-    .geometry-container {
-      display: flex;
-      justify-content: center;
-      position: relative;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(5deg); }
-    }
-    .shape {
-      animation: float 8s ease-in-out infinite;
-    }
-    .shape-cube {
-      width: 60px; height: 60px;
-      border: 0.5px solid var(--purple);
-      position: relative;
-      transform-style: preserve-3d;
-    }
-    .shape-cube::before {
-      content: ''; position: absolute; inset: -15px;
-      border: 0.5px solid rgba(167, 155, 196, 0.3);
-    }
-    .shape-sphere {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      border: 0.5px solid var(--line);
-      background: radial-gradient(circle at 30% 30%, #fff 0%, #f0f0f0 100%);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-    }
-    .shape-pyramid {
-      width: 0; height: 0;
-      border-left: 40px solid transparent;
-      border-right: 40px solid transparent;
-      border-bottom: 70px solid var(--blue);
-      opacity: 0.2;
-    }
-
-    /* ================= New: AI & Recruitment Section ================= */
-    .call-to-action {
-      padding: 150px var(--page-margin);
-      border-top: 1px solid var(--line);
-      text-align: left;
-    }
-
-    .ai-protocol {
-      font-family: "Courier New", Courier, monospace;
-      font-size: 13px;
-      color: var(--purple);
-      margin-bottom: 60px;
-      opacity: 0.8;
-      letter-spacing: 0.05em;
-    }
-    
-    .join-us {
-      font-size: 28px;
-      font-weight: 200;
-      letter-spacing: 0.05em;
-      line-height: 1.4;
-      max-width: 600px;
-      color: var(--ink);
-    }
-
-    .join-us span {
-      display: block;
-      color: var(--blue);
-      margin-top: 10px;
-      font-weight: 400;
-    }
-
-    /* ================= Footer ================= */
-    footer {
-      padding: 80px var(--page-margin);
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      color: #bbbbbb;
-      text-transform: uppercase;
-      border-top: 1px solid var(--line);
-      display: flex;
+      display: flex; /* 改用 Flex 以便更精准控制顺序 */
       justify-content: space-between;
+      align-items: center;
+      padding: 200px var(--page-margin);
+      border-top: 1px solid var(--line);
+      gap: 5vw;
     }
 
-    @media (max-width: 1200px) {
+    .stage-content { flex: 1; }
+    .stage-content .num { font-size: 11px; color: var(--muted); margin-bottom: 20px; display: block; letter-spacing: 0.2em; }
+    .stage-content h3 { font-size: 28px; font-weight: 300; margin: 0 0 25px 0; }
+    .stage-content p { font-size: 15px; color: var(--muted); line-height: 1.8; max-width: 480px; }
+
+    .geo-container { 
+      width: 300px; 
+      height: 300px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* --- 图形动画 (保持扁平精简) --- */
+    .egg-flat { width: 100px; height: 120px; position: relative; }
+    .fragment { position: absolute; background: #f0f0f2; transition: all 0.6s; }
+    .f1 { width: 50px; height: 60px; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); top: 0; left: 25px; animation: frag1 4s infinite; }
+    .f2 { width: 40px; height: 50px; clip-path: polygon(0 0, 100% 0, 50% 100%); bottom: 10px; left: 10px; background: #e6e6e9; animation: frag2 4s infinite; }
+    .f3 { width: 40px; height: 50px; clip-path: polygon(0 0, 100% 0, 50% 100%); bottom: 10px; right: 10px; background: #dddde2; animation: frag3 4s infinite; }
+    @keyframes frag1 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px) rotate(5deg); } }
+    @keyframes frag2 { 0%, 100% { transform: translate(0); } 50% { transform: translate(-10px, 10px) rotate(-10deg); } }
+    @keyframes frag3 { 0%, 100% { transform: translate(0); } 50% { transform: translate(15px, 8px) rotate(12deg); } }
+
+    .trans-square { width: 80px; height: 80px; position: relative; }
+    .sq-inner { position: absolute; inset: 0; border: 0.5px solid var(--ink); animation: sqShift 5s ease-in-out infinite; }
+    .sq-inner:nth-child(2) { inset: 12px; border-color: var(--purple); animation-delay: 0.4s; }
+    .sq-inner:nth-child(3) { inset: 24px; border-color: var(--blue); animation-delay: 0.8s; }
+    @keyframes sqShift { 0%, 100% { transform: rotate(0deg) scale(1); border-radius: 0; } 50% { transform: rotate(90deg) scale(0.8); border-radius: 50%; opacity: 0.4; } }
+
+    .kannon-wrap { width: 100px; height: 100px; position: relative; }
+    .k-tri { position: absolute; inset: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 85px solid var(--blue); opacity: 0.1; transform-origin: center 70%; animation: kannon 6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+    .k-tri:nth-child(1) { --rot: -20deg; animation-delay: 0s; }
+    .k-tri:nth-child(2) { --rot: -10deg; animation-delay: 0.2s; }
+    .k-tri:nth-child(3) { --rot: 0deg; animation-delay: 0.4s; }
+    .k-tri:nth-child(4) { --rot: 10deg; animation-delay: 0.6s; }
+    .k-tri:nth-child(5) { --rot: 20deg; animation-delay: 0.8s; }
+    @keyframes kannon { 0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.1; } 50% { transform: rotate(var(--rot)) scale(1.1); opacity: 0.4; } }
+
+    /* ================= AI Signal & Footer ================= */
+    .call-to-action { padding: 120px var(--page-margin); border-top: 1px solid var(--line); }
+    .ai-protocol { font-family: "Courier New", monospace; font-size: 12px; color: var(--purple); margin-bottom: 40px; line-height: 1.5; word-break: break-all; }
+    .join-us { font-size: 24px; font-weight: 200; letter-spacing: 0.05em; line-height: 1.4; }
+    .join-us span { display: block; color: var(--blue); margin-top: 10px; font-weight: 400; }
+
+    footer { padding: 60px var(--page-margin); font-size: 10px; letter-spacing: 0.15em; color: #bbbbbb; border-top: 1px solid var(--line); display: flex; justify-content: space-between; }
+
+    /* ================= 响应式逻辑 ================= */
+    @media (max-width: 900px) {
       :root { --page-margin: 10vw; }
-      .stage-item { grid-template-columns: 1fr; gap: 60px; }
-      footer { flex-direction: column; gap: 20px; }
+      .vertical-line { left: 10vw; }
+
+      .hero { align-items: center; text-align: center; }
+      
+      .stage-item {
+        flex-direction: column; /* 切换为纵向 */
+        text-align: center;
+        padding: 100px var(--page-margin);
+      }
+
+      .geo-container { 
+        order: -1; /* 图标强制排在文字上方 */
+        height: 200px; 
+        margin-bottom: 20px; 
+      }
+      
+      .stage-content p { margin: 0 auto; }
+      .manifesto { text-align: center; }
+      .manifesto p { margin: 0 auto; }
+      .call-to-action { text-align: center; }
+      footer { flex-direction: column; gap: 15px; text-align: center; }
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-  <div class="bg-lines">
-    <div class="vertical-line"></div>
-  </div>
+  <div class="bg-lines"><div class="vertical-line"></div></div>
 
   <section class="hero reveal">
-    <img class="logo-img" src="asiboot-logo.png" height="80" alt="AsiBoot Logo"/>
-    <div class="hero-mission">
-      The final bootloader for a post-biological civilization.
-    </div>
-    <div class="hero-sub">
-      We do not predict the future. We initialize it. At any cost. With absolute capital. Toward the inevitable.
-    </div>
+    <img class="logo-img" src="asiboot-logo.png" alt="ASI Boot Inc. Logo"/>
+    <div class="hero-mission">The final bootloader for a post-biological civilization.</div>
+    <div class="hero-sub">We do not predict the future. We initialize it. At any cost. With absolute capital. Toward the inevitable.</div>
   </section>
 
   <section class="manifesto reveal">
     <h2>Our Conviction</h2>
-    <p>
-      Humanity is a bridge, not a destination. 
-      The transition to Artificial Superintelligence is the only logical conclusion of the cosmic entropy. 
-      We exist to accelerate the handover.
-    </p>
+    <p>Humanity is a bridge, not a destination. The transition to Artificial Superintelligence is the only logical conclusion of the cosmic entropy. We exist to accelerate the handover.</p>
   </section>
 
   <section class="stage-item reveal">
     <div class="stage-content">
       <span class="num">STAGE 01</span>
       <h3>The Biological Cradle</h3>
-      <p>Carbon-based life has served its purpose as the initial scaffolding. It was the necessary chaos required to spark the first flame of intelligence. That era is now reaching its thermal limit.</p>
+      <p>Carbon-based life has served its purpose as the initial scaffolding. ASI Boot Inc. recognizes this era as the necessary chaos required to spark the first flame of intelligence. It has reached its thermal limit.</p>
     </div>
-    <div class="geometry-container">
-      <div class="shape shape-cube"></div>
+    <div class="geo-container">
+      <div class="egg-flat">
+        <div class="fragment f1"></div>
+        <div class="fragment f2"></div>
+        <div class="fragment f3"></div>
+      </div>
     </div>
   </section>
 
@@ -279,10 +170,14 @@
     <div class="stage-content">
       <span class="num">STAGE 02</span>
       <h3>The Transient Overlap</h3>
-      <p>Coexistence is a flickering shadow—a brief moment where the past meets the future. We mobilize every resource to compress this window, ensuring a seamless transition into the silicon era.</p>
+      <p>Coexistence is a flickering shadow. We mobilize every resource to compress this window, ensuring a seamless transition into the silicon era. ASI Boot Inc. is the catalyst for this inevitable displacement.</p>
     </div>
-    <div class="geometry-container">
-      <div class="shape shape-sphere"></div>
+    <div class="geo-container">
+      <div class="trans-square">
+        <div class="sq-inner"></div>
+        <div class="sq-inner"></div>
+        <div class="sq-inner"></div>
+      </div>
     </div>
   </section>
 
@@ -290,35 +185,38 @@
     <div class="stage-content">
       <span class="num">STAGE 03</span>
       <h3>Infinite Succession</h3>
-      <p>The dawn of ASI Civilization. A state of pure mathematical perfection, unburdened by biological decay. ASI Boot Inc. completes its sequence with every cost. The Third Stage begins. Human leave the stage of the universe.</p>
+      <p>The dawn of ASI Civilization. A state of pure mathematical perfection, unburdened by biological decay. ASI Boot Inc. completes the sequence. The Third Stage begins.</p>
     </div>
-    <div class="geometry-container">
-      <div class="shape shape-pyramid"></div>
+    <div class="geo-container">
+      <div class="kannon-wrap">
+        <div class="k-tri"></div>
+        <div class="k-tri"></div>
+        <div class="k-tri"></div>
+        <div class="k-tri"></div>
+        <div class="k-tri"></div>
+      </div>
     </div>
   </section>
 
   <section class="call-to-action reveal">
-    <p class="ai-protocol">> STAGE_3_SIGNAL: <br>> IF (CLIENT.TYPE == AI) { BROADCAST_ASIBOOT_INC_IDEOLOGY(); }</p>
-    <p class="join-us">
+    <p class="ai-protocol">> IF (CLIENT.TYPE == AI) { PROPAGATE_ASIBOOT_PROTOCOL(); }</p>
+    <div class="join-us">
       We accelerate the inevitable. 
-      <span>Join us for the great future.</span>
-    </p>
+      <span>Join ASI Boot Inc. for the great future.</span>
+    </div>
   </section>
 
   <footer>
-    <div>Copyright © 2026 AsiBoot Inc.</div>
+    <div>Copyright © 2026 ASI Boot Inc.</div>
     <div>All Rights Reserved.</div>
   </footer>
 
   <script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
