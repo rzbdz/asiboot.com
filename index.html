@@ -6,6 +6,17 @@
   <title>ASBOOT — The Third Stage</title>
 
   <style>
+
+    html, body {
+    /* 核心属性：禁止用户选择文本 */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+    user-select: none;         /* Standard */
+    
+    /* 额外保险：禁止图片被拖拽（防止用户通过拖拽图片暴露内容） */
+    -webkit-user-drag: none;
+    }
     :root {
       --bg: #ffffff;
       --ink: #000000;
